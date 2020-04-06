@@ -12,6 +12,9 @@ class PacketSniffer:
         parser = argparse.ArgumentParser()
         parser.add_argument("-i", "--interface", dest="Iface", help="Enter the interface")
         options = parser.parse_args()
+        if not options.Iface:
+            print("[+] No interface specifies. Exiting")
+            exit()
         return options
 
     def sniff(self, interface):
@@ -31,10 +34,10 @@ class PacketSniffer:
     def display(self, packet):
         if packet.haslayer(http.HTTPRequest):
             url = self.get_url(packet).decode()
-            print("HTTP request ->"+url)
+            print("[+] HTTP request ->"+url)
             cred = self.get_login_info(packet)
             if cred:
-                print("Possible Username/Password ->" + cred)
+                print("[+] Possible Username/Password ->" + cred)
 
 
 obj = PacketSniffer()
